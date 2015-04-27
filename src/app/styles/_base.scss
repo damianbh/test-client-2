@@ -721,6 +721,8 @@ $standard-icon-color-active, $standard-text-color-active) {
     font-size: 25px;
     color: white;
     margin-right: 15px;
+    position: absolute;
+    right: 0;
     &:hover {
       color: darken(white, 20%);
       cursor: pointer;
