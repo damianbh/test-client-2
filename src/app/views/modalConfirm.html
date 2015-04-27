@@ -1,0 +1,25 @@
+<div class="modal-fade" ng-style="zIndexStyle">
+  <div class="modal-overlay modal-confirm animated zoomIn">
+    <div class="row">
+      <div class="col-xs-12"><i ng-click="close('cancel')" class="icon-cross"></i></div>
+    </div>
+    <div class="row">
+      <div class="col-xs-10 margin-title"><span class="title">{{title}}</span></div>
+    </div>
+    <div class="row message-margin">
+      <div class="col-xs-12"><span class="message">{{message}}</span></div>
+    </div>
+    <div class="row toolbar">
+      <div class="col-xs-12">
+        <button ng-repeat="button in buttons"
+                class="btn pull-right btn-{{button.type}}" ms-focus="$index == 0"
+                ng-click="close('{{button.result}}')"
+                style="margin-left: 10px;">
+          {{ button.text }}
+
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,100 @@
+<div class="modal-fade" ng-style="zIndexStyle">
+  <div class="modal-overlay animated zoomIn modify-dialog">
+    <div class="row">
+      <div class="col-xs-10 main-title">{{ ModalClient.title}}</div>
+      <div class="col-xs-2"><i ng-click="ModalClient.on.close('cancel')"
+                               class="icon-cross"></i></div>
+    </div>
+
+
+    <form name="clientForm" role="form" novalidate=""
+          ng-submit="ModalClient.on.saveData(clientForm.$valid)">
+
+
+      <div class="form-group"
+           ng-class="{'has-error': ((clientForm.$submitted || clientForm.name.$touched) && clientForm.name.$invalid),'has-success':clientForm.name.$valid}">
+        <div class="errors" ng-messages="clientForm.name.$error"
+             ng-if="clientForm.$submitted || clientForm.name.$touched"
+             ng-messages-include="/views/errors.html"></div>
+        <label class="control-label" for="name">Name</label>
+        <input ms-focus="true" type="text" class="form-control" id="name" name="name"
+               placeholder="Please enter First Name"
+               ng-model="ModalClient.model.name" required>
+
+
+      </div>
+      <div class="form-group"
+           ng-class="{'has-error': ((clientForm.$submitted || clientForm.email.$touched) && clientForm.email.$invalid),'has-success':clientForm.email.$valid}">
+        <div class="errors" ng-messages="clientForm.email.$error"
+             ng-if="clientForm.$submitted || clientForm.email.$touched"
+             ng-messages-include="/views/errors.html"></div>
+        <label class="control-label" for="email">Email</label>
+        <input type="email" class="form-control" id="email" name="email" placeholder="Please enter Last Name"
+               ng-model="ModalClient.model.email" required>
+      </div>
+      <div class="form-group"
+           ng-class="{'has-error': ((clientForm.$submitted || clientForm.phone.$touched) && clientForm.phone.$invalid),'has-success':clientForm.phone.$valid}">
+        <div class="errors" ng-messages="clientForm.phone.$error"
+             ng-if="clientForm.$submitted || clientForm.phone.$touched"
+             ng-messages-include="/views/errors.html">
+          <div class="error" ng-message="pattern">
+            <span popover-append-to-body="true" popover-trigger="mouseenter"
+                  popover="This field only allow numbers, please fill it with proper information"
+                  class="label label-danger">Only numbers allowed</span>
+          </div>
+        </div>
+        <label class="control-label" for="phone">Phone</label>
+        <input type="text" class="form-control" id="phone" name="phone" placeholder="Please enter Phone Number"
+               pattern="^[0-9]*$"
+               ng-model="ModalClient.model.phone" required>
+      </div>
+      <div class="form-group"
+           ng-class="{'has-error': ((clientForm.$submitted || clientForm.Providers.$touched) && clientForm.Providers.$invalid),'has-success':clientForm.Providers.$valid}">
+        <div class="errors" ng-messages="clientForm.Providers.$error"
+             ng-if="clientForm.$submitted || clientForm.Providers.$touched"
+             ng-messages-include="/views/errors.html"></div>
+        <label class="control-label" for="Providers">Providers</label>
+        <ui-select multiple
+                   id="Providers"
+                   name="Providers"
+                   ng-model="ModalClient.model.Providers"
+                   theme="bootstrap"
+                   close-on-select="false">
+          <ui-select-match>
+            <div class="provider-item" popover="{{$item.address}}, Phone {{$item.phone}}"
+                 popover-trigger="mouseenter" popover-append-to-body="true">
+              <i class="icon-truck"></i>{{$item.name}}, {{$item.descr}}
+              <!--<i class="icon-truck"></i>{{$item | json}}-->
+            </div>
+          </ui-select-match>
+          <ui-select-choices
+            repeat="provider.id as provider in filteredProviders = (providers | propsFilter: {name: $select.search, descr: $select.search,address:$select.search, phone:$select.search} | orderBy: 'name')">
+            <div ng-bind-html="provider.name | highlight: $select.search"></div>
+            <small style="display:block;">
+              Description: <span ng-bind-html="''+provider.descr | highlight: $select.search"></span>
+            </small>
+            <small style="display:block;">
+              Phone: <span ng-bind-html="''+provider.phone | highlight: $select.search"></span>
+            </small>
+            <small style="display:block;">
+              Address: <span ng-bind-html="''+provider.address | highlight: $select.search"></span>
+            </small>
+          </ui-select-choices>
+        </ui-select>
+
+      </div>
+
+      <div class="row toolbar">
+        <div class="col-xs-12">
+          <button type="submit" class="btn btn-primary pull-right">Save</button>
+          <button type="button" class="btn btn-default pull-right" style="margin-right: 10px;"
+                  ng-click="ModalClient.on.close('cancel')">Cancel
+          </button>
+
+        </div>
+      </div>
+
+    </form>
+
+  </div>
+</div>

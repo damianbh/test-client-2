@@ -1,0 +1,93 @@
+@font-face {
+	font-family: 'icomoon';
+	src:url('fonts/icomoon.eot?vsib9e');
+	src:url('fonts/icomoon.eot?#iefixvsib9e') format('embedded-opentype'),
+		url('fonts/icomoon.woff?vsib9e') format('woff'),
+		url('fonts/icomoon.ttf?vsib9e') format('truetype'),
+		url('fonts/icomoon.svg?vsib9e#icomoon') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+	font-family: 'icomoon';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.icon-lock:before {
+	content: "\e601";
+}
+
+.icon-library:before {
+	content: "\e600";
+}
+
+.icon-pencil:before {
+	content: "\e905";
+}
+
+.icon-user:before {
+	content: "\e971";
+}
+
+.icon-users:before {
+	content: "\e972";
+}
+
+.icon-user-tie:before {
+	content: "\e976";
+}
+
+.icon-spinner10:before {
+	content: "\e983";
+}
+
+.icon-search:before {
+	content: "\e986";
+}
+
+.icon-key:before {
+	content: "\e98d";
+}
+
+.icon-bin:before {
+	content: "\e9ac";
+}
+
+.icon-truck:before {
+	content: "\e9b0";
+}
+
+.icon-menu3:before {
+	content: "\e9bf";
+}
+
+.icon-eye:before {
+	content: "\e9ce";
+}
+
+.icon-question:before {
+	content: "\ea09";
+}
+
+.icon-plus:before {
+	content: "\ea0a";
+}
+
+.icon-cancel-circle:before {
+	content: "\ea0d";
+}
+
+.icon-cross:before {
+	content: "\ea0f";
+}
+

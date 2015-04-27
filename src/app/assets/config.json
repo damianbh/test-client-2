@@ -1,0 +1,5 @@
+{
+  "API_URL" : "http://localhost:8000/",
+  "RESULTS_PER_PAGE" : 10,
+  "CAS_URL": "http://localhost:3002"
+}

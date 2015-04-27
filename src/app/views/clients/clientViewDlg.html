@@ -1,0 +1,123 @@
+<div class="modal-fade" ng-style="zIndexStyle">
+  <div class="modal-overlay animated zoomIn client-view-dialog">
+    <div class="row">
+      <div class="col-xs-10 main-title">View Client</div>
+      <div class="col-xs-2"><i ng-click="ModalClientView.on.close('cancel')"
+                               class="icon-cross"></i></div>
+    </div>
+
+
+    <form name="clientForm" role="form" novalidate="">
+      <div class="row">
+        <div class="col-xs-6">
+          <div class="form-group">
+            <label class="control-label" for="name">Name</label>
+            <input type="text" class="form-control" id="name" name="name"
+                   disabled
+                   ng-model="ModalClientView.model.name" required>
+          </div>
+        </div>
+        <div class="col-xs-6">
+          <div class="form-group">
+            <label class="control-label" for="email">Email</label>
+            <input type="text" class="form-control" id="email" name="email"
+                   disabled
+                   ng-model="ModalClientView.model.email" required>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-6">
+          <div class="form-group">
+            <label class="control-label" for="phone">Phone</label>
+            <input type="text" class="form-control" id="phone" name="phone"
+                   disabled
+                   ng-model="ModalClientView.model.phone" required>
+          </div>
+
+        </div>
+      </div>
+
+      <table class="table table-striped" st-pipe="ModalClientView.callServer"
+             st-table="ModalClientView.smartTable.rowCollection">
+        <thead>
+        <tr>
+          <th colspan="3">
+            <span class="main-tab-title">Providers</span>
+          </th>
+
+          <th colspan="2">
+            <div class="input-group search-ctrol">
+              <input st-search placeholder="Search" class="input-sm form-control" ng-model="globalSearch"
+                     type="search"/>
+              <span class="input-group-addon"><i class="icon-search"></i></span>
+
+            </div>
+
+
+          </th>
+        </tr>
+        <tr>
+          <!--<th><span st-sort="id" class="col-header">Id</span></th>-->
+          <th width="23%"><span st-sort="name" class="col-header">Name</span></th>
+          <th width="23%"><span st-sort="descr" class="col-header">Description</span></th>
+          <th width="23%"><span st-sort="phone" class="col-header">Phone</span></th>
+          <th width="23%"><span st-sort="address" class="col-header">Address</span></th>
+          <th width="8%"></th>
+        </tr>
+        <!--<tr>-->
+        <!--<th><input st-search="id"/></th>-->
+        <!--<th><input st-search="name"/></th>-->
+        <!--<th><input st-search="age"/></th>-->
+        <!--<th><input st-search="saved"/></th>-->
+
+        <!--</tr>-->
+        </thead>
+        <tbody ng-if="!ModalClientView.smartTable.isLoading">
+        <tr ng-repeat="row in ModalClientView.smartTable.rowCollection">
+          <td ng-bind-html="row.name | highlight: globalSearch"></td>
+          <td ng-bind-html="row.descr | highlight: globalSearch"></td>
+          <td ng-bind-html="row.phone | highlight: globalSearch"></td>
+          <td colspan="2" ng-bind-html="row.address | highlight: globalSearch"></td>
+        </tr>
+        <tr ng-if="!ModalClientView.smartTable.rowCollection.length">
+          <td colspan="5" class="text-center">
+            <span>No Providers found</span>
+          </td>
+        </tr>
+        </tbody>
+        <tbody ng-if="ModalClientView.smartTable.isLoading">
+        <tr>
+          <td colspan="5">
+            <!--<div class="grid-loader">-->
+            <i class="icon-spinner10 grid-loader"></i>
+            <!--</div>-->
+          </td>
+        </tr>
+        </tbody>
+        <tfoot ng-if="!ModalClientView.smartTable.isLoading">
+        <tr>
+          <td colspan="5">
+            <div class="text-center" st-pagination=""
+                 st-items-by-page="ModalClientView.smartTable.resultsPerPage"></div>
+            <small ng-if="ModalClientView.smartTable.rowCollection.length" class="content-range text-center">
+              {{ModalClientView.smartTable.contentRange}}
+            </small>
+          </td>
+        </tr>
+        </tfoot>
+      </table>
+
+      <div class="row toolbar">
+        <div class="col-xs-12">
+          <button type="button" ms-focus="true" class="btn btn-primary pull-right"
+                  ng-click="ModalClientView.on.close('cancel')">Close
+          </button>
+
+        </div>
+      </div>
+
+    </form>
+
+  </div>
+</div>

@@ -1,0 +1,49 @@
+<div class="modal-fade" ng-style="zIndexStyle">
+  <div class="modal-overlay animated zoomIn modify-dialog">
+    <div class="row">
+      <div class="col-xs-10 main-title">{{ ModalOffice.title}}</div>
+      <div class="col-xs-2"><i ng-click="ModalOffice.on.close('cancel')"
+                               class="icon-cross"></i></div>
+    </div>
+
+
+    <form name="officeForm" role="form" novalidate=""
+          ng-submit="ModalOffice.on.saveData(officeForm.$valid)">
+
+
+      <div class="form-group"
+           ng-class="{'has-error': ((officeForm.$submitted || officeForm.name.$touched) && officeForm.name.$invalid),'has-success':officeForm.name.$valid}">
+        <div class="errors" ng-messages="officeForm.name.$error"
+             ng-if="officeForm.$submitted || officeForm.name.$touched"
+             ng-messages-include="/views/errors.html">
+
+          <div class="error" ng-message="name_must_be_unique">
+            <span popover-append-to-body="true" popover-trigger="mouseenter"
+                  popover="Office name already exists. Please provide an Office name that's not already registered"
+                  class="label label-danger">
+              Office name must be unique
+            </span>
+          </div>
+        </div>
+        <label class="control-label" for="name">Name</label>
+        <input ms-focus="true" type="text" class="form-control" id="name" name="name"
+               placeholder="Please enter Office Name"
+               ng-model="ModalOffice.model.name" required>
+
+
+      </div>
+
+      <div class="row toolbar">
+        <div class="col-xs-12">
+          <button type="submit" class="btn btn-primary pull-right">Save</button>
+          <button type="button" class="btn btn-default pull-right" style="margin-right: 10px;"
+                  ng-click="ModalOffice.on.close('cancel')">Cancel
+          </button>
+
+        </div>
+      </div>
+
+    </form>
+
+  </div>
+</div>

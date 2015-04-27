@@ -1,0 +1,37 @@
+<div class="help-tab">
+  <div class="row">
+    <div class="col-xs-12"><span class="help-tab-title">Help</span></div>
+  </div>
+  <div class="container">
+    <p>
+      This application has two main functionalities, Clients and Providers. Users having <code> "manager" </code>
+      role
+      can access Clients and Users having <code> "human_resources" </code> role can access Providers.
+      Here are all posible users and their passwords and roles.
+
+    </p>
+  </div>
+
+  <div class="col-xs-12">
+      <pre class="prettyprint">
+        [
+          {
+            user: 'nestor.urquiza@gmail.com',
+            password: 'nestor',
+            roles: ['director', 'human_resources']
+          },
+          {
+            user: 'damianbh@gmail.com',
+            password: 'damianbh',
+            roles: ['human_resources', 'manager']
+          },
+          {
+            user:'alejandro@gmail.com',
+            password: 'alejandro',
+            roles: ['director']
+          }
+        ]
+      </pre>
+  </div>
+</div>
+

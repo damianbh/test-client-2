@@ -1,0 +1,67 @@
+<div class="login-page">
+  <div class="row margin-top">
+    <div class="col-xs-9 col-xs-offset-3 title"><h2>Please enter your Credentials</h2></div>
+
+  </div>
+  <div class="row margin">
+    <div class="col-xs-3">
+      <span class="lock"><i class="icon-lock"></i></span>
+    </div>
+    <div class="col-xs-6">
+      <form name="loginForm" role="form" novalidate=""
+            ng-submit="Login.on.doLogin(loginForm.$valid)">
+
+
+        <div class="form-group"
+             ng-class="{'has-error': ((loginForm.$submitted || loginForm.name.$touched) && loginForm.name.$invalid),'has-success':loginForm.name.$valid}">
+          <div class="errors" ng-messages="loginForm.name.$error"
+               ng-if="loginForm.$submitted || loginForm.name.$touched"
+               ng-messages-include="/views/errors.html">
+            <div class="error" ng-message="invalid-credentials">
+  <span popover-append-to-body="true" popover-trigger="mouseenter"
+        popover="Please, enter a valid User/Password combination"
+        class="label label-danger">Invalid Credentials</span>
+            </div>
+          </div>
+          <label class="control-label" for="name">User</label>
+
+          <div class="input-group">
+            <input ms-focus="true" type="text" class="form-control" id="name" name="name"
+                   placeholder="Please enter User Name"
+                   ng-model="Login.model.name" required>
+            <span class="input-group-addon"><i class="icon-user"></i></span>
+          </div>
+
+        </div>
+
+        <div class="form-group"
+             ng-class="{'has-error': ((loginForm.$submitted || loginForm.password.$touched) && loginForm.password.$invalid),'has-success':loginForm.password.$valid}">
+          <div class="errors" ng-messages="loginForm.password.$error"
+               ng-if="loginForm.$submitted || loginForm.password.$touched"
+               ng-messages-include="/views/errors.html">
+
+          </div>
+          <label class="control-label" for="password">Password</label>
+
+          <div class="input-group">
+            <input type="password" class="form-control" id="password" name="password"
+                   placeholder="Please enter Password"
+                   ng-model="Login.model.password" required>
+            <span class="input-group-addon"><i class="icon-key"></i></span>
+          </div>
+        </div>
+        <div class="row toolbar">
+
+          <div class="col-xs-12">
+            <button type="submit" class="btn btn-primary pull-right">Login</button>
+
+          </div>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+
+</div>

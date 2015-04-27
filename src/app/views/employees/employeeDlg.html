@@ -1,0 +1,97 @@
+<div class="modal-fade" ng-style="zIndexStyle">
+  <div class="modal-overlay animated zoomIn modify-dialog">
+    <div class="row">
+      <div class="col-xs-10 main-title">{{ ModalEmployee.title}}</div>
+      <div class="col-xs-2"><i ng-click="ModalEmployee.on.close('cancel')"
+                               class="icon-cross"></i></div>
+    </div>
+
+
+    <form name="employeeForm" role="form" novalidate=""
+          ng-submit="ModalEmployee.on.saveData(employeeForm.$valid)">
+
+
+      <div class="form-group"
+           ng-class="{'has-error': ((employeeForm.$submitted || employeeForm.firstName.$touched) && employeeForm.firstName.$invalid),'has-success':employeeForm.firstName.$valid}">
+        <div class="errors" ng-messages="employeeForm.firstName.$error"
+             ng-if="employeeForm.$submitted || employeeForm.firstName.$touched"
+             ng-messages-include="/views/errors.html"></div>
+        <label class="control-label" for="firstName">First Name</label>
+        <input ms-focus="true" type="text" class="form-control" id="firstName" name="firstName"
+               placeholder="Please enter First Name"
+               ng-model="ModalEmployee.model.firstName" required>
+
+
+      </div>
+      <div class="form-group"
+           ng-class="{'has-error': ((employeeForm.$submitted || employeeForm.lastName.$touched) && employeeForm.lastName.$invalid),'has-success':employeeForm.lastName.$valid}">
+        <div class="errors" ng-messages="employeeForm.lastName.$error"
+             ng-if="employeeForm.$submitted || employeeForm.lastName.$touched"
+             ng-messages-include="/views/errors.html"></div>
+        <label class="control-label" for="lastName">Last Name</label>
+        <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Please enter Last Name"
+               ng-model="ModalEmployee.model.lastName" required>
+      </div>
+      <div class="form-group"
+           ng-class="{'has-error': ((employeeForm.$submitted || employeeForm.initials.$touched) && employeeForm.initials.$invalid),'has-success':employeeForm.initials.$valid}">
+        <div class="errors" ng-messages="employeeForm.initials.$error"
+             ng-if="employeeForm.$submitted || employeeForm.initials.$touched"
+             ng-messages-include="/views/errors.html">
+          <div class="error" ng-message="pattern">
+            <span popover-append-to-body="true" popover-trigger="mouseenter"
+                  popover="This field allows only uppercase letters, no spaces, please fill it with proper information"
+                  class="label label-danger">Only uppercase letters allowed (No spaces)</span>
+          </div>
+        </div>
+        <label class="control-label" for="initials">Initials</label>
+        <input type="text" class="form-control" id="initials" name="initials" placeholder="Please enter Initials"
+               pattern="^[A-Z]*$"
+               ng-model="ModalEmployee.model.initials" required>
+      </div>
+      <div class="form-group"
+           ng-class="{'has-error': ((employeeForm.$submitted || employeeForm.officeId.$touched) && employeeForm.officeId.$invalid),'has-success':employeeForm.officeId.$valid}">
+        <div class="errors" ng-messages="employeeForm.officeId.$error"
+             ng-if="employeeForm.$submitted || employeeForm.officeId.$touched"
+             ng-messages-include="/views/errors.html"></div>
+        <label class="control-label" for="officeId">Office</label>
+        <ui-select id="officeId"
+                   name="officeId"
+                   required
+                   ng-model="ModalEmployee.model.officeId"
+                   theme="bootstrap"
+                   reset-search-input="false">
+          <ui-select-match placeholder="Search Offices">
+            <i class="icon-cross"
+               ng-click="$event.stopPropagation();ModalEmployee.model.officeId = undefined;">
+            </i>
+
+            <span>{{$select.selected.name}}</span>
+          </ui-select-match>
+          <ui-select-choices repeat="office.id as office in offices"
+                             refresh="ModalEmployee.on.refreshOffices($select.search)"
+                             refresh-delay="0">
+            <div ng-bind-html="office.name | highlight: $select.search"></div>
+          </ui-select-choices>
+        </ui-select>
+
+
+      </div>
+      <!--{{employeeForm.firstName.$error |json}}-->
+      <!--{{ModalEmployee.model |json}}-->
+      <div class="row toolbar">
+        <div class="col-xs-12">
+          <button type="submit" class="btn btn-primary pull-right">Save</button>
+          <button type="button" class="btn btn-default pull-right" style="margin-right: 10px;"
+                  ng-click="ModalEmployee.on.close('cancel')">Cancel
+          </button>
+          <!--<button type="button" class="btn btn-default pull-right" style="margin-right: 10px;"-->
+          <!--ng-click="employeeForm.firstName.$setValidity('email', false);">Test Validation-->
+          <!--</button>-->
+
+        </div>
+      </div>
+
+    </form>
+
+  </div>
+</div>

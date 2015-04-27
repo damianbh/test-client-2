@@ -1,0 +1,12 @@
+<div class="main-header">
+  <span class="user-photo">
+    <img ng-src="{{Home.CAS_URL + Home.security.getSecurityData().image}}" alt=""/>
+  </span>
+  <span class="welcome">Welcome {{Home.security.getSecurityData().name}}</span>
+  <i popover-trigger="mouseenter"
+     popover="Logout" popover-placement="bottom"
+     class="icon-cancel-circle pull-right"
+     ng-click="Home.on.doLogout()"></i></div>
+<active-list maincls="'main-bar list-inline'" list="Home.list" img-src="'/assets/logo.png'"></active-list>
+<div ui-view></div>
+

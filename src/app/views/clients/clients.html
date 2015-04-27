@@ -1,0 +1,93 @@
+<div class="main-tab">
+
+
+  <table class="table table-striped" st-pipe="Clients.callServer" st-table="Clients.smartTable.rowCollection">
+    <thead>
+    <tr>
+      <th colspan="3">
+        <span class="main-tab-title">Clients</span> <a class="add-btn"
+                                                       popover-trigger="mouseenter"
+                                                       popover="New Client"
+                                                       ng-click="Clients.on.newOptsClick()">
+        <i class="icon-plus"></i></a>
+      </th>
+
+      <th colspan="2">
+        <div class="input-group search-ctrol">
+          <input st-search placeholder="Search" class="input-sm form-control" ng-model="globalSearch" type="search"/>
+          <span class="input-group-addon"><i class="icon-search"></i></span>
+
+        </div>
+
+
+      </th>
+    </tr>
+    <tr>
+      <!--<th><span st-sort="id" class="col-header">Id</span></th>-->
+      <th width="23%"><span st-sort="name" class="col-header">Name</span></th>
+      <th width="23%"></th>
+      <th width="23%"><span st-sort="email" class="col-header">Email</span></th>
+      <th width="23%"><span st-sort="phone" class="col-header">Phone</span></th>
+      <th width="8%"></th>
+    </tr>
+    <!--<tr>-->
+    <!--<th><input st-search="id"/></th>-->
+    <!--<th><input st-search="name"/></th>-->
+    <!--<th><input st-search="age"/></th>-->
+    <!--<th><input st-search="saved"/></th>-->
+
+    <!--</tr>-->
+    </thead>
+    <tbody ng-if="!Clients.smartTable.isLoading">
+    <tr ng-repeat="row in Clients.smartTable.rowCollection" st-selected-row="row">
+      <!--<td>{{row.id}}</td>-->
+      <td colspan="2" ng-bind-html="row.name | highlight: globalSearch"></td>
+      <td ng-bind-html="row.email | highlight: globalSearch"></td>
+      <td ng-bind-html="row.phone | highlight: globalSearch"></td>
+
+      <td><span class="dropdown" dropdown>
+        <i class="dropdown-toggle icon-menu3" dropdown-toggle></i>
+      <ul class="dropdown-menu grid-menu">
+        <li>
+          <a href ng-click="Clients.on.editOptsClick(row)"><i class="icon-pencil"></i> <span>Edit</span></a>
+        </li>
+        <li>
+          <a href ng-click="Clients.on.deleteOptsClick(row)"><i class="icon-bin"></i> <span>Delete</span></a>
+        </li>
+        <li>
+          <a href ng-click="Clients.on.viewOptsClick(row)"><i class="icon-eye"></i> <span>View</span></a>
+        </li>
+      </ul>
+    </span></td>
+    </tr>
+    <tr ng-if="!Clients.smartTable.rowCollection.length">
+      <td colspan="5" class="text-center">
+        <span>No Clients found</span>
+      </td>
+    </tr>
+    </tbody>
+    <tbody ng-if="Clients.smartTable.isLoading">
+    <tr>
+      <td colspan="5">
+        <i class="icon-spinner10 grid-loader"></i>
+      </td>
+    </tr>
+    </tbody>
+    <tfoot ng-if="!Clients.smartTable.isLoading">
+
+    <tr>
+
+      <td colspan="5">
+        <div class="text-center" st-pagination="" st-items-by-page="Clients.smartTable.resultsPerPage"></div>
+        <small ng-if="Clients.smartTable.rowCollection.length" class="content-range text-center">
+          {{Clients.smartTable.contentRange}}
+        </small>
+      </td>
+    </tr>
+
+
+    </tfoot>
+  </table>
+
+
+</div>

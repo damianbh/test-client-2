@@ -1,0 +1,94 @@
+<div class="modal-fade" ng-style="zIndexStyle">
+  <div class="modal-overlay animated zoomIn modify-dialog">
+    <div class="row">
+      <div class="col-xs-10 main-title">{{ ModalProvider.title}}</div>
+      <div class="col-xs-2"><i ng-click="ModalProvider.on.close('cancel')"
+                               class="icon-cross"></i></div>
+    </div>
+
+
+    <form name="providerForm" role="form" novalidate=""
+          ng-submit="ModalProvider.on.saveData(providerForm.$valid)">
+
+
+      <div class="form-group"
+           ng-class="{'has-error': ((providerForm.$submitted || providerForm.name.$touched) && providerForm.name.$invalid),'has-success':providerForm.name.$valid}">
+        <div class="errors" ng-messages="providerForm.name.$error"
+             ng-if="providerForm.$submitted || providerForm.name.$touched"
+             ng-messages-include="/views/errors.html">
+
+          <div class="error" ng-message="name_must_be_unique">
+            <span popover-append-to-body="true" popover-trigger="mouseenter"
+                  popover="Provider name already exists. Please provide a Provider name that's not already registered"
+                  class="label label-danger">
+              Provider name must be unique
+            </span>
+          </div>
+        </div>
+        <label class="control-label" for="name">Name</label>
+        <input ms-focus="true" type="text" class="form-control" id="name" name="name"
+               placeholder="Please enter Provider Name"
+               ng-model="ModalProvider.model.name" required>
+
+
+      </div>
+
+      <div class="form-group"
+           ng-class="{'has-error': ((providerForm.$submitted || providerForm.descr.$touched) && providerForm.descr.$invalid),'has-success':providerForm.descr.$valid}">
+        <div class="errors" ng-messages="providerForm.descr.$error"
+             ng-if="providerForm.$submitted || providerForm.descr.$touched"
+             ng-messages-include="/views/errors.html">
+
+        </div>
+        <label class="control-label" for="descr">Description</label>
+        <input type="text" class="form-control" id="descr" name="descr"
+               placeholder="Please enter Provider Description"
+               ng-model="ModalProvider.model.descr" required>
+
+
+      </div>
+
+      <div class="form-group"
+           ng-class="{'has-error': ((providerForm.$submitted || providerForm.phone.$touched) && providerForm.phone.$invalid),'has-success':providerForm.phone.$valid}">
+        <div class="errors" ng-messages="providerForm.phone.$error"
+             ng-if="providerForm.$submitted || providerForm.phone.$touched"
+             ng-messages-include="/views/errors.html">
+
+        </div>
+        <label class="control-label" for="phone">Phone</label>
+        <input type="text" class="form-control" id="phone" name="phone"
+               placeholder="Please enter Provider Phone"
+               ng-model="ModalProvider.model.phone" required>
+
+
+      </div>
+
+      <div class="form-group"
+           ng-class="{'has-error': ((providerForm.$submitted || providerForm.address.$touched) && providerForm.address.$invalid),'has-success':providerForm.address.$valid}">
+        <div class="errors" ng-messages="providerForm.address.$error"
+             ng-if="providerForm.$submitted || providerForm.address.$touched"
+             ng-messages-include="/views/errors.html">
+
+        </div>
+        <label class="control-label" for="address">Address</label>
+        <input type="text" class="form-control" id="address" name="address"
+               placeholder="Please enter Provider Address"
+               ng-model="ModalProvider.model.address" required>
+
+
+      </div>
+
+      <div class="row toolbar">
+        <div class="col-xs-12">
+          <button type="submit" class="btn btn-primary pull-right">Save</button>
+          <button type="button" class="btn btn-default pull-right" style="margin-right: 10px;"
+                  ng-click="ModalProvider.on.close('cancel')">Cancel
+          </button>
+
+        </div>
+      </div>
+
+    </form>
+
+  </div>
+</div>
