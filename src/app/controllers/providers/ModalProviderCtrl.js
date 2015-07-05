@@ -6,7 +6,7 @@
  * Controller of the testClientGulp
  */
 angular.module('testClientGulp')
-  .controller('ModalProviderCtrl', function ($scope, $rootScope, provider, loader, errorService, close) {
+  .controller('ModalProviderCtrl', function ($scope, $rootScope, provider, loader, currentForm, close) {
     'use strict';
 
     var
@@ -29,13 +29,10 @@ angular.module('testClientGulp')
 
         self.saving = true;
         loader.invasiveVisible();
+        currentForm.setFrm($scope.providerForm);
         return provider.$save().then(function () {
           $rootScope.$broadcast('$saved-provider', provider, isEdit);
           close('saved');
-        }).catch(function (resp) {
-          if (resp.status === 400) {
-            errorService.formError(resp, $scope.providerForm);
-          }
         }).finally(function () {
           loader.invasiveInvisible();
           self.saving = false;

@@ -19,63 +19,10 @@ angular.module('testClientGulp')
         }
         return config;
       },
-
-      // optional method
-      //'requestError': function(rejection) {
-      // do something on error
-      //if (canRecover(rejection)) {
-      //  return responseOrNewPromise
-      //}
-      //return $q.reject(rejection);
-      //},
-
-
-      // optional method
-      //'response': function(response) {
-      // do something on success
-      //return response;
-      //},
-
-      // optional method
       'responseError': function (resp) {
-        // do something on error
-        //if (canRecover(rejection)) {
-        //  return responseOrNewPromise
-        //}
         var
-          //ModalService = $injector.get('ModalService'),
           errorService = $injector.get('errorService');
-          //$http = $injector.get('$http'),
-        //  canClose = (resp.config.loginDlgConf && resp.config.loginDlgConf.canClose);
-        //if (_.isUndefined(canClose)) {
-        //  canClose = true;
-        //}
         switch (resp.status) {
-          //case 401:
-          //  return ModalService.showModal({
-          //    templateUrl: '/views/modalLogin.html',
-          //    controller: 'ModalLoginCtrl as ModalLogin',
-          //
-          //    inputs: {
-          //      canClose: canClose
-          //    }
-          //  }).then(function (modal) {
-          //    return modal.close.then(function (result) {
-          //      switch (result) {
-          //        case 'logged':
-          //          return $http(resp.config);
-          //          break;
-          //
-          //        default:
-          //          return $q.reject(resp);
-          //          break;
-          //      }
-          //    });
-          //  });
-          //  break;
-          case 400:
-            return $q.reject(resp);
-            break;
           default:
             if (!resp.config.doNotHandleErrors) {
               errorService.showError(resp);
@@ -83,8 +30,6 @@ angular.module('testClientGulp')
             return $q.reject(resp);
             break;
         }
-
-
       }
     };
   });

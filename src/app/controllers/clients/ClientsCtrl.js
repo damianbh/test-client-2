@@ -113,11 +113,7 @@ angular.module('testClientGulp')
                 loader.invasiveVisible();
                 client.$delete().then(function () {
                   ctrl.smartTable.api.slice(0, ctrl.smartTable.resultsPerPage);
-                })
-                //  .catch(function (resp) {
-                //  errorService.showError(resp);
-                //})
-                  .finally(function () {
+                }).finally(function () {
                   loader.invasiveInvisible();
                 });
                 break;

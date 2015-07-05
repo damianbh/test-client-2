@@ -205,14 +205,6 @@ angular.module('testClientGulp')
                 loader.invasiveVisible();
                 row.$delete().then(function () {
                   ctrl.smartTable.api.slice(0, ctrl.smartTable.resultsPerPage);
-                }).catch(function (resp) {
-                  if (resp.status === 400)  {
-                    if (_.isObject(resp.data) && resp.data.code === 'CONSTRAINT_ERROR'){
-                      resp.data.message = 'Provider cannot be deleted because it has clients assigned';
-                    }
-                    errorService.showError(resp);
-                  }
-
                 }).finally(function () {
                   loader.invasiveInvisible();
                 });
@@ -237,7 +229,7 @@ angular.module('testClientGulp')
  * Controller of the testClientGulp
  */
 angular.module('testClientGulp')
-  .controller('ModalProviderCtrl', function ($scope, $rootScope, provider, loader, errorService, close) {
+  .controller('ModalProviderCtrl', function ($scope, $rootScope, provider, loader, currentForm, close) {
     'use strict';
 
     var
@@ -260,13 +252,10 @@ angular.module('testClientGulp')
 
         self.saving = true;
         loader.invasiveVisible();
+        currentForm.setFrm($scope.providerForm);
         return provider.$save().then(function () {
           $rootScope.$broadcast('$saved-provider', provider, isEdit);
           close('saved');
-        }).catch(function (resp) {
-          if (resp.status === 400) {
-            errorService.formError(resp, $scope.providerForm);
-          }
         }).finally(function () {
           loader.invasiveInvisible();
           self.saving = false;
@@ -407,7 +396,7 @@ angular.module('testClientGulp')
  * Controller of the testClientGulp
  */
 angular.module('testClientGulp')
-  .controller('ModalClientCtrl', function ($scope, $rootScope, client, providers, loader, errorService, $timeout, $http, close) {
+  .controller('ModalClientCtrl', function ($scope, $rootScope, client, providers, loader, currentForm, close) {
     'use strict';
     var
       self = this;
@@ -421,8 +410,6 @@ angular.module('testClientGulp')
 
     self.title = (client.id ? 'Edit Client' : 'New Client');
 
-
-    //self.offices = $resource(API_URL + "api/offices/:id").query();
     self.on = {
       close: function (action) {
         close(action);
@@ -435,15 +422,11 @@ angular.module('testClientGulp')
         }
         self.saving = true;
         loader.invasiveVisible();
-        //return $http.post(config.API_URL + 'api/clients/' + client.id + '/providers', client.Providers).then(function () {
+        currentForm.setFrm($scope.clientForm);
         return client.$save().then(function () {
           $rootScope.$broadcast('$saved-client', client, isEdit);
           close('saved');
 
-        }).catch(function (resp) {
-          if (resp.status === 400) {
-            errorService.formError(resp, $scope.clientForm);
-          }
         }).finally(function () {
           self.saving = false;
           loader.invasiveInvisible();
@@ -574,11 +557,7 @@ angular.module('testClientGulp')
                 loader.invasiveVisible();
                 client.$delete().then(function () {
                   ctrl.smartTable.api.slice(0, ctrl.smartTable.resultsPerPage);
-                })
-                //  .catch(function (resp) {
-                //  errorService.showError(resp);
-                //})
-                  .finally(function () {
+                }).finally(function () {
                   loader.invasiveInvisible();
                 });
                 break;
@@ -846,63 +825,10 @@ angular.module('testClientGulp')
         }
         return config;
       },
-
-      // optional method
-      //'requestError': function(rejection) {
-      // do something on error
-      //if (canRecover(rejection)) {
-      //  return responseOrNewPromise
-      //}
-      //return $q.reject(rejection);
-      //},
-
-
-      // optional method
-      //'response': function(response) {
-      // do something on success
-      //return response;
-      //},
-
-      // optional method
       'responseError': function (resp) {
-        // do something on error
-        //if (canRecover(rejection)) {
-        //  return responseOrNewPromise
-        //}
         var
-          //ModalService = $injector.get('ModalService'),
           errorService = $injector.get('errorService');
-          //$http = $injector.get('$http'),
-        //  canClose = (resp.config.loginDlgConf && resp.config.loginDlgConf.canClose);
-        //if (_.isUndefined(canClose)) {
-        //  canClose = true;
-        //}
         switch (resp.status) {
-          //case 401:
-          //  return ModalService.showModal({
-          //    templateUrl: '/views/modalLogin.html',
-          //    controller: 'ModalLoginCtrl as ModalLogin',
-          //
-          //    inputs: {
-          //      canClose: canClose
-          //    }
-          //  }).then(function (modal) {
-          //    return modal.close.then(function (result) {
-          //      switch (result) {
-          //        case 'logged':
-          //          return $http(resp.config);
-          //          break;
-          //
-          //        default:
-          //          return $q.reject(resp);
-          //          break;
-          //      }
-          //    });
-          //  });
-          //  break;
-          case 400:
-            return $q.reject(resp);
-            break;
           default:
             if (!resp.config.doNotHandleErrors) {
               errorService.showError(resp);
@@ -910,14 +836,12 @@ angular.module('testClientGulp')
             return $q.reject(resp);
             break;
         }
-
-
       }
     };
   });
 
 angular.module('testClientGulp')
-  .service('errorService', function (ModalService, loader) {
+  .service('errorService', function (ModalService, loader, currentForm) {
     'use strict';
 
     var
@@ -968,48 +892,97 @@ angular.module('testClientGulp')
         505: 'Http Version Not Supported'
       };
 
-    self.formError = function (response, form, fieldTrans, errorExt) {
-      var
-        msg = '';
-
-      if (_.isObject(response.data) && response.data.code === 'VALIDATION_ERROR' &&
-        _.isObject(response.data.errors)) {
-        fieldTrans = _.isObject(fieldTrans) ? fieldTrans : {};
-        _.each(_.keys(response.data.errors), function (key) {
-            _.each(_.keys(response.data.errors[key]), function (errKey) {
-              var
-                validator = function () {
-                  return true;
-                };
-              if (fieldTrans[key]) {
-                key = fieldTrans[key];
-              }
-              if (form[key]) {
-                form[key].$setValidity(errKey, false);
-                if (!form[key].$validators[errKey]) {
-                  form[key].$validators[errKey] = validator;
-                }
-              } else {
-                msg = msg + ' Validation ' + errKey + ' failed to field ' + key;
-              }
-            });
-          }
-        );
-        if (msg !== '') {
-          response.data.message = response.data.message ? response.data.message : '';
-          response.data.message = response.data.message + ' ' + msg;
-          self.showError(response, errorExt);
-        }
-      } else {
-        self.showError(response, errorExt);
-      }
-
-    };
+    //self.formError = function (response, form, fieldTrans, errorExt) {
+    //  var
+    //    msg = '';
+    //
+    //  if (_.isObject(response.data) && response.data.code === 'VALIDATION_ERROR' &&
+    //    _.isObject(response.data.errors)) {
+    //    fieldTrans = _.isObject(fieldTrans) ? fieldTrans : {};
+    //    _.each(_.keys(response.data.errors), function (key) {
+    //        _.each(_.keys(response.data.errors[key]), function (errKey) {
+    //          var
+    //            validator = function () {
+    //              return true;
+    //            };
+    //          if (fieldTrans[key]) {
+    //            key = fieldTrans[key];
+    //          }
+    //          if (form[key]) {
+    //            form[key].$setValidity(errKey, false);
+    //            if (!form[key].$validators[errKey]) {
+    //              form[key].$validators[errKey] = validator;
+    //            }
+    //          } else {
+    //            msg = msg + ' Validation ' + errKey + ' failed to field ' + key;
+    //          }
+    //        });
+    //      }
+    //    );
+    //    if (msg !== '') {
+    //      response.data.message = response.data.message ? response.data.message : '';
+    //      response.data.message = response.data.message + ' ' + msg;
+    //      self.showError(response, errorExt);
+    //    }
+    //  } else {
+    //    self.showError(response, errorExt);
+    //  }
+    //
+    //};
 
     self.showError = function (response, errorExt) {
+      var
+        form,
+        fieldTrans,
+        msg = '';
+
+      if (response.status === 400) {
+        form = currentForm.getFrm();
+        fieldTrans = currentForm.getFieldTrans();
+        if (_.isObject(response.data)) {
+          if (response.data.code === 'VALIDATION_ERROR' &&
+            _.isObject(response.data.errors) && form) {
+            fieldTrans = _.isObject(fieldTrans) ? fieldTrans : {};
+            _.each(_.keys(response.data.errors), function (key) {
+                _.each(_.keys(response.data.errors[key]), function (errKey) {
+                  var
+                    validator = function () {
+                      return true;
+                    };
+                  if (fieldTrans[key]) {
+                    key = fieldTrans[key];
+                  }
+                  if (form[key]) {
+                    form[key].$setValidity(errKey, false);
+                    if (!form[key].$validators[errKey]) {
+                      form[key].$validators[errKey] = validator;
+                    }
+                  } else {
+                    msg = msg + ' Validation ' + errKey + ' failed to field ' + key;
+                  }
+                });
+              }
+            );
+            if (msg !== '') {
+              response.data.message = response.data.message ? response.data.message : '';
+              response.data.message = response.data.message + ' ' + msg;
+            } else {
+              return;
+            }
+          }
+
+          if (response.data.code === 'CONSTRAINT_ERROR') {
+            response.data.message = 'Changes you are currently trying to do are restricted because of a database constraint. Most probably you are trying' +
+              ' to delete data that is being used in another area of the System. More info: ' +
+              response.data.message;
+          }
+        }
+
+
+      }
 
       if (response.status === 401) {
-        ModalService.showModal({
+        return ModalService.showModal({
           templateUrl: '/views/modalError.html',
           controller: 'ModalCtrl',
           inputs: {
@@ -1039,55 +1012,77 @@ angular.module('testClientGulp')
             }
           });
         });
+      }
+      var
+        message;
+
+      if (_.isObject(response.data) && response.data.message) {
+        message = response.data.message;
       } else {
-        var
-          message;
-
-        if (_.isObject(response.data) && response.data.message) {
-          message = response.data.message;
-        } else {
-          if (!_.isUndefined(response.status)) {
-            if (!_.isObject(errorExt)) {
-              errorExt = {};
-            }
-            var
-              codExt = _.extend({}, codes, errorExt);
-            message = codExt[response.status];
+        if (!_.isUndefined(response.status)) {
+          if (!_.isObject(errorExt)) {
+            errorExt = {};
           }
-
+          var
+            codExt = _.extend({}, codes, errorExt);
+          message = codExt[response.status];
         }
 
-        if (!message) {
-          message = 'Unknown Error';
-        }
-
-        ModalService.showModal({
-          templateUrl: '/views/modalError.html',
-          controller: 'ModalCtrl',
-          inputs: {
-            title: 'An error has occurred',
-            buttons: {
-              ok: {
-                type: 'primary',
-                text: 'Close'
-              }
-            },
-            message: message
-          }
-        }).then(function (modal) {
-          modal.close.then(function (result) {
-            switch (result) {
-              case 'ok':
-
-                break;
-
-              default:
-
-            }
-          });
-        });
       }
 
+      if (!message) {
+        message = 'Unknown Error';
+      }
+
+      ModalService.showModal({
+        templateUrl: '/views/modalError.html',
+        controller: 'ModalCtrl',
+        inputs: {
+          title: 'An error has occurred',
+          buttons: {
+            ok: {
+              type: 'primary',
+              text: 'Close'
+            }
+          },
+          message: message
+        }
+      }).then(function (modal) {
+        modal.close.then(function (result) {
+          switch (result) {
+            case 'ok':
+
+              break;
+
+            default:
+
+          }
+        });
+      });
+
+
+    };
+
+  });
+
+angular.module('testClientGulp')
+  .factory('currentForm', function () {
+    'use strict';
+    var currentForm,
+      fieldTrans;
+    return {
+      setFrm: function (newFrm) {
+        currentForm = newFrm;
+      },
+      getFrm: function () {
+        return currentForm;
+      },
+      setFieldTrans: function (newFieldTrans) {
+        fieldTrans = newFieldTrans;
+      },
+      getFieldTrans: function () {
+        return fieldTrans;
+      }
     };
 
   });

@@ -84,14 +84,6 @@ angular.module('testClientGulp')
                 loader.invasiveVisible();
                 row.$delete().then(function () {
                   ctrl.smartTable.api.slice(0, ctrl.smartTable.resultsPerPage);
-                }).catch(function (resp) {
-                  if (resp.status === 400)  {
-                    if (_.isObject(resp.data) && resp.data.code === 'CONSTRAINT_ERROR'){
-                      resp.data.message = 'Provider cannot be deleted because it has clients assigned';
-                    }
-                    errorService.showError(resp);
-                  }
-
                 }).finally(function () {
                   loader.invasiveInvisible();
                 });
