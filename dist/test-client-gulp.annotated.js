@@ -1818,35 +1818,28 @@ module.run(['$templateCache', function($templateCache) {
   $templateCache.put('/views/help/help.html',
     '<div class="help-tab"><div class="row"><div class="col-xs-12"><span class="help-tab-title">Help</span></div></div><div class="container"><p>This application has two main functionalities, Clients and Providers. Users having <code>"manager"</code> role can access Clients and Users having <code>"human_resources"</code> role can access Providers. Here are all posible users and their passwords and roles.</p></div><div class="col-xs-12"><pre class="prettyprint">\n' +
     '        [\n' +
-    '          {\n' +
-    '            user: \'nestor.urquiza@gmail.com\',\n' +
-    '            password: \'nestor\',\n' +
-    '            roles: [\'director\', \'human_resources\']\n' +
+    '          \'nestor.urquiza@gmail.com\': {\n' +
+    '              password: \'nestor\',\n' +
+    '              roles: [\'director\', \'human_resources\']\n' +
     '          },\n' +
-    '          {\n' +
-    '            user: \'damianbh@gmail.com\',\n' +
-    '            password: \'damianbh\',\n' +
-    '            roles: [\'human_resources\', \'manager\']\n' +
+    '          \'lgutierrezvalencia@krfs.com\': {\n' +
+    '              password: \'lilia\',\n' +
+    '              roles: [\'director\', \'human_resources\', \'manager\']\n' +
     '          },\n' +
-    '          {\n' +
-    '            user:\'alejandro@gmail.com\',\n' +
-    '            password: \'alejandro\',\n' +
-    '            roles: [\'director\']\n' +
+    '          \'wmedina@krfs.com\': {\n' +
+    '              password: \'williams\',\n' +
+    '              roles: [\'director\', \'human_resources\', \'manager\']\n' +
+    '          },\n' +
+    '          \'damianbh@gmail.com\': {\n' +
+    '              password: \'damianbh\',\n' +
+    '              roles: [\'human_resources\', \'manager\']\n' +
+    '          },\n' +
+    '          \'alejandro@gmail.com\': {\n' +
+    '              password: \'alejandro\',\n' +
+    '              roles: [\'director\', \'manager\']\n' +
     '          }\n' +
     '        ]\n' +
     '      </pre></div></div>');
-}]);
-})();
-
-(function(module) {
-try {
-  module = angular.module('testClientGulp');
-} catch (e) {
-  module = angular.module('testClientGulp', []);
-}
-module.run(['$templateCache', function($templateCache) {
-  $templateCache.put('/views/login/login.html',
-    '<div class="login-page"><div class="row margin-top"><div class="col-xs-9 col-xs-offset-3 title"><h2>Please enter your Credentials</h2></div></div><div class="row margin"><div class="col-xs-3"><span class="lock"><i class="icon-lock"></i></span></div><div class="col-xs-6"><form name="loginForm" role="form" novalidate ng-submit="Login.on.doLogin(loginForm.$valid)"><div class="form-group" ng-class="{\'has-error\': ((loginForm.$submitted || loginForm.name.$touched) && loginForm.name.$invalid),\'has-success\':loginForm.name.$valid}"><div class="errors" ng-messages="loginForm.name.$error" ng-if="loginForm.$submitted || loginForm.name.$touched" ng-messages-include="/views/errors.html"><div class="error" ng-message="invalid-credentials"><span popover-append-to-body="true" popover-trigger="mouseenter" popover="Please, enter a valid User/Password combination" class="label label-danger">Invalid Credentials</span></div></div><label class="control-label" for="name">User</label><div class="input-group"><input ms-focus="true" class="form-control" id="name" name="name" placeholder="Please enter User Name" ng-model="Login.model.name" required> <span class="input-group-addon"><i class="icon-user"></i></span></div></div><div class="form-group" ng-class="{\'has-error\': ((loginForm.$submitted || loginForm.password.$touched) && loginForm.password.$invalid),\'has-success\':loginForm.password.$valid}"><div class="errors" ng-messages="loginForm.password.$error" ng-if="loginForm.$submitted || loginForm.password.$touched" ng-messages-include="/views/errors.html"></div><label class="control-label" for="password">Password</label><div class="input-group"><input type="password" class="form-control" id="password" name="password" placeholder="Please enter Password" ng-model="Login.model.password" required> <span class="input-group-addon"><i class="icon-key"></i></span></div></div><div class="row toolbar"><div class="col-xs-12"><button type="submit" class="btn btn-primary pull-right">Login</button></div></div></form></div></div></div>');
 }]);
 })();
 
@@ -1895,5 +1888,17 @@ try {
 module.run(['$templateCache', function($templateCache) {
   $templateCache.put('/views/providers/providers.html',
     '<div class="main-tab"><table class="table table-striped" st-pipe="Providers.callServer" st-table="Providers.smartTable.rowCollection"><thead><tr><th colspan="3"><span class="main-tab-title">Providers</span> <a class="add-btn" popover-trigger="mouseenter" popover="New Provider" ng-click="Providers.on.newOptsClick()"><i class="icon-plus"></i></a></th><th colspan="2"><div class="input-group search-ctrol"><input st-search placeholder="Search" class="input-sm form-control" ng-model="globalSearch" type="search"> <span class="input-group-addon"><i class="icon-search"></i></span></div></th></tr><tr><th width="23%"><span st-sort="name" class="col-header">Name</span></th><th width="23%"><span st-sort="descr" class="col-header">Description</span></th><th width="23%"><span st-sort="phone" class="col-header">Phone</span></th><th width="23%"><span st-sort="address" class="col-header">Address</span></th><th width="8%"></th></tr></thead><tbody ng-if="!Providers.smartTable.isLoading"><tr ng-repeat="row in Providers.smartTable.rowCollection" st-selected-row="row"><td ng-bind-html="row.name | highlight: globalSearch"></td><td ng-bind-html="row.descr | highlight: globalSearch"></td><td ng-bind-html="row.phone | highlight: globalSearch"></td><td ng-bind-html="row.address | highlight: globalSearch"></td><td><span class="dropdown" dropdown><i class="dropdown-toggle icon-menu3" dropdown-toggle></i><ul class="dropdown-menu grid-menu"><li><a href ng-click="Providers.on.editOptsClick(row)"><i class="icon-pencil"></i> <span>Edit</span></a></li><li><a href ng-click="Providers.on.deleteOptsClick(row)"><i class="icon-bin"></i> <span>Delete</span></a></li></ul></span></td></tr><tr ng-if="!Providers.smartTable.rowCollection.length"><td colspan="5" class="text-center"><span>No Providers found</span></td></tr></tbody><tbody ng-if="Providers.smartTable.isLoading"><tr><td colspan="5"><i class="icon-spinner10 grid-loader"></i></td></tr></tbody><tfoot ng-if="!Providers.smartTable.isLoading"><tr><td colspan="5"><div class="text-center" st-pagination="" st-items-by-page="Providers.smartTable.resultsPerPage"></div><small ng-if="Providers.smartTable.rowCollection.length" class="content-range text-center">{{Providers.smartTable.contentRange}}</small></td></tr></tfoot></table></div>');
+}]);
+})();
+
+(function(module) {
+try {
+  module = angular.module('testClientGulp');
+} catch (e) {
+  module = angular.module('testClientGulp', []);
+}
+module.run(['$templateCache', function($templateCache) {
+  $templateCache.put('/views/login/login.html',
+    '<div class="login-page"><div class="row margin-top"><div class="col-xs-9 col-xs-offset-3 title"><h2>Please enter your Credentials</h2></div></div><div class="row margin"><div class="col-xs-3"><span class="lock"><i class="icon-lock"></i></span></div><div class="col-xs-6"><form name="loginForm" role="form" novalidate ng-submit="Login.on.doLogin(loginForm.$valid)"><div class="form-group" ng-class="{\'has-error\': ((loginForm.$submitted || loginForm.name.$touched) && loginForm.name.$invalid),\'has-success\':loginForm.name.$valid}"><div class="errors" ng-messages="loginForm.name.$error" ng-if="loginForm.$submitted || loginForm.name.$touched" ng-messages-include="/views/errors.html"><div class="error" ng-message="invalid-credentials"><span popover-append-to-body="true" popover-trigger="mouseenter" popover="Please, enter a valid User/Password combination" class="label label-danger">Invalid Credentials</span></div></div><label class="control-label" for="name">User</label><div class="input-group"><input ms-focus="true" class="form-control" id="name" name="name" placeholder="Please enter User Name" ng-model="Login.model.name" required> <span class="input-group-addon"><i class="icon-user"></i></span></div></div><div class="form-group" ng-class="{\'has-error\': ((loginForm.$submitted || loginForm.password.$touched) && loginForm.password.$invalid),\'has-success\':loginForm.password.$valid}"><div class="errors" ng-messages="loginForm.password.$error" ng-if="loginForm.$submitted || loginForm.password.$touched" ng-messages-include="/views/errors.html"></div><label class="control-label" for="password">Password</label><div class="input-group"><input type="password" class="form-control" id="password" name="password" placeholder="Please enter Password" ng-model="Login.model.password" required> <span class="input-group-addon"><i class="icon-key"></i></span></div></div><div class="row toolbar"><div class="col-xs-12"><button type="submit" class="btn btn-primary pull-right">Login</button></div></div></form></div></div></div>');
 }]);
 })();
